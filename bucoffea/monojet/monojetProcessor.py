@@ -111,8 +111,10 @@ class monojetProcessor(processor.ProcessorABC):
 
         # Common selection
         selection.add('inclusive', np.ones(df.size)==1)
-        selection.add('filt_met', df['Flag_METFilters'])
-        selection.add('trig_met', combine_masks(df, cfg.TRIGGERS.MET))
+        # selection.add('filt_met', df['Flag_METFilters'])
+        selection.add('filt_met', np.ones(df.size)==1)
+        # selection.add('trig_met', combine_masks(df, cfg.TRIGGERS.MET))
+        selection.add('trig_met', np.ones(df.size)==1)
         selection.add('veto_ele', electrons.counts==0)
         selection.add('veto_muo', muons.counts==0)
         selection.add('veto_photon', photons.counts==0)
