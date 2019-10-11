@@ -1,6 +1,4 @@
 default:
-  dynaconf_include:
-    - monojet.yaml
   test: false
   selection:
     signal:

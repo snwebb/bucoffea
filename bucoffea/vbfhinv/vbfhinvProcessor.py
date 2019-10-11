@@ -58,6 +58,7 @@ class vbfhinvProcessor(processor.ProcessorABC):
         cfg.DYNACONF_WORKS="merge_configs"
         cfg.MERGE_ENABLED_FOR_DYNACONF=True
         cfg.SETTINGS_FILE_FOR_DYNACONF = bucoffea_path("config/vbfhinv.yaml")
+        cfg.PRELOAD_FOR_DYNACONF=[bucoffea_path("config/monojet.yaml")]
 
         # Reload config based on year
         if df:
