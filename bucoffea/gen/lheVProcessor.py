@@ -7,7 +7,7 @@ from awkward import JaggedArray
 from coffea import hist
 from coffea.analysis_objects import JaggedCandidateArray
 
-from bucoffea.helpers import min_dphi_jet_met
+from bucoffea.helpers import min_dphi_jet_met, dphi
 from bucoffea.helpers.dataset import (extract_year, is_lo_g, is_lo_w, is_lo_z,
                                       is_nlo_g, is_nlo_w, is_nlo_z)
 from bucoffea.helpers.gen import (fill_gen_v_info, find_gen_dilepton, islep,
@@ -40,6 +40,14 @@ def vbf_selection(vphi, dijet, genjets):
     selection.add(
                   'mindphijr',
                   min_dphi_jet_met(genjets, vphi.max(), njet=4, ptmin=30) > 0.5
+                  )
+    selection.add(
+                  'detajj',
+                  np.abs(dijet.i0.eta-dijet.i1.eta).max() > 1
+                  )
+    selection.add(
+                  'dphijj',
+                  dphi(dijet.i0.phi,dijet.i1.phi).min() < 1.5
                   )
 
     return selection
