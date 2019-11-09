@@ -126,7 +126,7 @@ class lheVProcessor(processor.ProcessorABC):
             )
         gen = setup_gen_candidates(df)
         tags = ['stat1','lhe']
-        if is_lo_w(dataset) or is_nlo_w(dataset) or is_lo_z(dataset) or is_lo_w(dataset):
+        if is_lo_w(dataset) or is_nlo_w(dataset) or is_lo_z(dataset) or is_nlo_z(dataset):
             dressed = setup_dressed_gen_candidates(df)
             fill_gen_v_info(df, gen, dressed)
             tags.append('dress')
