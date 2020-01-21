@@ -9,6 +9,8 @@ from bucoffea.helpers.gen import (fill_gen_v_info,
                                   setup_dressed_gen_candidates,
                                   setup_gen_candidates,setup_lhe_cleaned_genjets)
 
+import ROOT
+
 Hist = hist.Hist
 Bin = hist.Bin
 Cat = hist.Cat
@@ -111,17 +113,19 @@ class lheVProcessor(processor.ProcessorABC):
 
         # Dilepton
         gen = setup_gen_candidates(df)
-        tags = ['stat1','lhe']
-        if is_lo_w(dataset) or is_nlo_w(dataset) or is_lo_z(dataset) or is_nlo_z(dataset):
-            dressed = setup_dressed_gen_candidates(df)
-            fill_gen_v_info(df, gen, dressed)
-            tags.extend(['dress','combined'])
-        elif is_lo_g(dataset) or is_nlo_g(dataset) or is_lo_g_ewk(dataset) or is_nlo_g_ewk(dataset):
-            photons = gen[(gen.status==1)&(gen.pdg==22)]
-            df['gen_v_pt_stat1'] = photons.pt.max()
-            df['gen_v_phi_stat1'] = photons[photons.pt.argmax()].phi.max()
-            df['gen_v_pt_lhe'] = df['LHE_Vpt']
-            df['gen_v_phi_lhe'] = np.zeros(df.size)
+        #        tags = ['stat1','lhe']
+        #tags = ['dress']
+        tags = ['combined']
+        #        if is_lo_w(dataset) or is_nlo_w(dataset) or is_lo_z(dataset) or is_nlo_z(dataset):
+        dressed = setup_dressed_gen_candidates(df)
+        fill_gen_v_info(df, gen, dressed)
+#            tags.extend(['dress','combined'])
+        # elif is_lo_g(dataset) or is_nlo_g(dataset) or is_lo_g_ewk(dataset) or is_nlo_g_ewk(dataset):
+        #     photons = gen[(gen.status==1)&(gen.pdg==22)]
+        #     df['gen_v_pt_stat1'] = photons.pt.max()
+        #     df['gen_v_phi_stat1'] = photons[photons.pt.argmax()].phi.max()
+        #     df['gen_v_pt_lhe'] = df['LHE_Vpt']
+        #     df['gen_v_phi_lhe'] = np.zeros(df.size)
 
         dijet = genjets[:,:2].distincts()
         mjj = dijet.mass.max()
@@ -140,6 +144,19 @@ class lheVProcessor(processor.ProcessorABC):
                                     weight=nominal
                                     )
             mask_vbf = vbf_sel.all(*vbf_sel.names)
+
+            h = ROOT.TH1D("mjj","mjj",3500,0,3500)
+            h1 = ROOT.TH1D("vpt","vpt",120,0,1200)
+
+            for mjj2,w in zip(dijet.mass.max()[mask_vbf],nominal[mask_vbf]):
+                h.Fill(mjj2,w)
+            h.SaveAs("mjj.root")
+
+            for vpt,w in zip(df[f'gen_v_pt_{tag}'][mask_vbf],nominal[mask_vbf]):
+                h1.Fill(vpt,w)
+            h1.SaveAs("vpt.root")
+
+
             output[f'gen_vpt_vbf_{tag}'].fill(
                                     dataset=dataset,
                                     vpt=df[f'gen_v_pt_{tag}'][mask_vbf],

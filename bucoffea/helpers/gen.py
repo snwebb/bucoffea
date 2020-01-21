@@ -79,12 +79,12 @@ def stat1_dilepton(df, gen):
     :return: pt and phi of dilepton
     :rtype: tuple of two 1D arrays
     """
-    if is_lo_z(df['dataset']) or is_lo_z_ewk(df['dataset']) or is_nlo_z(df['dataset']):
-        pdgsum = 0
-        target = 91
-    elif is_lo_w(df['dataset']) or  is_lo_w_ewk(df['dataset']) or is_nlo_w(df['dataset']):
-        pdgsum = 1
-        target = 81
+    # if is_lo_z(df['dataset']) or is_lo_z_ewk(df['dataset']) or is_nlo_z(df['dataset']):
+    #     pdgsum = 0
+    #     target = 91
+    # elif is_lo_w(df['dataset']) or  is_lo_w_ewk(df['dataset']) or is_nlo_w(df['dataset']):
+    pdgsum = 1
+    target = 81
     gen_dilep = find_gen_dilepton(gen, pdgsum)
     gen_dilep = gen_dilep[(np.abs(gen_dilep.mass-target)).argmin()]
     return gen_dilep.pt.max(), gen_dilep.phi.max()
@@ -152,38 +152,38 @@ def dressed_dilep(df, gen, dressed):
     """
     # Dressed leptons
     neutrinos = gen[(gen.status==1) & isnu(gen.pdg)]
-    if is_lo_z(df['dataset']) or is_nlo_z(df['dataset']) or is_lo_z_ewk(df['dataset']):
-        target = 91
-        # e, mu
-        dilep_dress = find_gen_dilepton(dressed, 0)
-        dilep_dress = dilep_dress[np.abs(dilep_dress.mass-target).argmin()]
+    # if is_lo_z(df['dataset']) or is_nlo_z(df['dataset']) or is_lo_z_ewk(df['dataset']):
+    #     target = 91
+    #     # e, mu
+    #     dilep_dress = find_gen_dilepton(dressed, 0)
+    #     dilep_dress = dilep_dress[np.abs(dilep_dress.mass-target).argmin()]
 
-        #nu
-        dilep_nu = find_gen_dilepton(neutrinos, 0)
-        dilep_nu = dilep_nu[np.abs(dilep_nu.mass-target).argmin()]
+    #     #nu
+    #     dilep_nu = find_gen_dilepton(neutrinos, 0)
+    #     dilep_nu = dilep_nu[np.abs(dilep_nu.mass-target).argmin()]
 
-        # tau
-        dilep_tau = find_gen_dilepton(gen[np.abs(gen.pdg)==15], 0)
-        dilep_tau = dilep_tau[np.abs(dilep_tau.mass-target).argmin()]
+    #     # tau
+    #     dilep_tau = find_gen_dilepton(gen[np.abs(gen.pdg)==15], 0)
+    #     dilep_tau = dilep_tau[np.abs(dilep_tau.mass-target).argmin()]
 
-        # Merge by taking higher-mass
-        return merge_dileptons(dilep_tau, dilep_dress, dilepton3=dilep_nu, target=target)
+    #     # Merge by taking higher-mass
+    #     return merge_dileptons(dilep_tau, dilep_dress, dilepton3=dilep_nu, target=target)
 
-    elif is_lo_w(df['dataset']) or is_nlo_w(df['dataset']) or is_lo_w_ewk(df['dataset']):
-        target = 81
-        # e, mu
-        dilep_dress = dressed.cross(neutrinos)
-        dilep_dress = dilep_dress[ (
-                                      ((np.abs(dilep_dress.i0.pdg)==11) & (np.abs(dilep_dress.i1.pdg)==12) ) \
-                                    | ((np.abs(dilep_dress.i0.pdg)==13) & (np.abs(dilep_dress.i1.pdg)==14) ) \
-                                    ) & (dilep_dress.i0.pdg*dilep_dress.i1.pdg< 0)
-                                    ]
-        dilep_dress = dilep_dress[np.abs(dilep_dress.mass-target).argmin()]
+    # elif is_lo_w(df['dataset']) or is_nlo_w(df['dataset']) or is_lo_w_ewk(df['dataset']):
+    target = 81
+    # e, mu
+    dilep_dress = dressed.cross(neutrinos)
+    dilep_dress = dilep_dress[ (
+                                  ((np.abs(dilep_dress.i0.pdg)==11) & (np.abs(dilep_dress.i1.pdg)==12) ) \
+                                | ((np.abs(dilep_dress.i0.pdg)==13) & (np.abs(dilep_dress.i1.pdg)==14) ) \
+                                ) & (dilep_dress.i0.pdg*dilep_dress.i1.pdg< 0)
+                                ]
+    dilep_dress = dilep_dress[np.abs(dilep_dress.mass-target).argmin()]
 
-        # tau
-        dilep_tau = find_gen_dilepton(gen[(np.abs(gen.pdg)==15) | (np.abs(gen.pdg)==16)], 1)
-        dilep_tau = dilep_tau[np.abs(dilep_tau.mass-target).argmin()]
-        return  merge_dileptons(dilep_tau, dilep_dress, target=target)
+    # tau
+    dilep_tau = find_gen_dilepton(gen[(np.abs(gen.pdg)==15) | (np.abs(gen.pdg)==16)], 1)
+    dilep_tau = dilep_tau[np.abs(dilep_tau.mass-target).argmin()]
+    return  merge_dileptons(dilep_tau, dilep_dress, target=target)
 
 
 def genv(gen):
