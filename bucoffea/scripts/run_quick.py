@@ -17,9 +17,16 @@ def parse_commandline():
 
 def main():
 
+    # fileset = {
+    #     "VBF_HToInvisible_M125_pow_pythia8_2017" : [
+    #         "root://cmsxrootd.fnal.gov//store/user/aandreas/nanopost/27Oct19/VBF_HToInvisible_M125_13TeV_TuneCP5_powheg_pythia8/VBF_HToInvisible_M125_pow_pythia8_2017/191027_233758/0000/tree_1.root"
+    #     ]
+    # }
+
+
     fileset = {
-        "VBF_HToInvisible_M125_pow_pythia8_2017" : [
-            "root://cmsxrootd.fnal.gov//store/user/aandreas/nanopost/27Oct19/VBF_HToInvisible_M125_13TeV_TuneCP5_powheg_pythia8/VBF_HToInvisible_M125_pow_pythia8_2017/191027_233758/0000/tree_1.root"
+        "W2JetsToLNu_LHEWpT_150-250-FXFX_2017" : [
+            "/eos/user/s/sawebb/HInv/samples/W2Jets_150-250.root"
         ]
     }
 
@@ -60,7 +67,7 @@ def main():
                                     processor_instance=processorInstance,
                                     executor=processor.futures_executor,
                                     executor_args={'workers': 4, 'flatten': True},
-                                    chunksize=500000,
+                                    chunksize=1500000,
                                     )
         save(output, f"{processor_class}_{dataset}.coffea")
         # Debugging / testing output
