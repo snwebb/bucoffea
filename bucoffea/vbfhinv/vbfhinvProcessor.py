@@ -323,7 +323,7 @@ class vbfhinvProcessor(processor.ProcessorABC):
         # Save per-event values for synchronization
         if cfg.RUN.KINEMATICS.SAVE:
             #for event in cfg.RUN.KINEMATICS.EVENTS:
-            mask2 = selection.all(*regions['sync_sr_vbf_round1'])
+            mask2 = selection.all(*regions['cr_sync'])
             for event in df['event'][mask2]:
                 mask = df['event'] == event
                 if not mask.any():
