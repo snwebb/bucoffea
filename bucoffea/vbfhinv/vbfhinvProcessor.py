@@ -149,7 +149,7 @@ class vbfhinvProcessor(processor.ProcessorABC):
         # Already pre-filtered!
         # All leptons are at least loose
         # Check out setup_candidates for filtering details
-        met_pt, met_phi, ak4, bjets, _, muons, electrons, taus, photons = setup_candidates(df, cfg)
+        met_pt, met_phi, ak4, bjets, muons, electrons, taus, photons = setup_candidates(df, cfg)
 
         # Filtering ak4 jets according to pileup ID
         ak4 = ak4[ak4.puid]
@@ -318,9 +318,13 @@ class vbfhinvProcessor(processor.ProcessorABC):
             if not (gen_v_pt is None):
                 weights = theory_weights_vbf(weights, df, evaluator, gen_v_pt, df['mjj_gen'])
 
+        regions = vbfhinv_regions(cfg)
+
         # Save per-event values for synchronization
         if cfg.RUN.KINEMATICS.SAVE:
-            for event in cfg.RUN.KINEMATICS.EVENTS:
+            #for event in cfg.RUN.KINEMATICS.EVENTS:
+            mask2 = selection.all(*regions['sync_sr_vbf_round1'])
+            for event in df['event'][mask2]:
                 mask = df['event'] == event
                 if not mask.any():
                     continue
@@ -332,7 +336,7 @@ class vbfhinvProcessor(processor.ProcessorABC):
 
                 output['kinematics']['ak4pt0'] += [ak4[leadak4_index][mask].pt]
                 output['kinematics']['ak4eta0'] += [ak4[leadak4_index][mask].eta]
-                output['kinematics']['leadbtag'] += [ak4.pt.max()<0][mask]
+                #output['kinematics']['leadbtag'] += [ak4.pt.max()<0][mask]
 
                 output['kinematics']['nLooseMu'] += [muons.counts[mask]]
                 output['kinematics']['nTightMu'] += [muons[df['is_tight_muon']].counts[mask]]
@@ -358,7 +362,6 @@ class vbfhinvProcessor(processor.ProcessorABC):
             output['sumw2'][dataset] +=  df['genEventSumw2']
             output['sumw_pileup'][dataset] +=  weights._weights['pileup'].sum()
 
-        regions = vbfhinv_regions(cfg)
         for region, cuts in regions.items():
             # Blinding
             if(self._blind and df['is_data'] and region.startswith('sr')):

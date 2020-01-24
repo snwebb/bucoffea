@@ -17,11 +17,23 @@ def parse_commandline():
 
 def main():
 
+    # fileset = {
+    #     "W2JetsToLNu_LHEWpT_150-250-FXFX_2017" : [
+    #         "/eos/user/s/sawebb/HInv/samples/W2Jets_150-250.root"
+    #     ]
+    # }
+
     fileset = {
-        "VBF_HToInvisible_M125_pow_pythia8_2017" : [
-            "root://cmsxrootd.fnal.gov//store/user/aandreas/nanopost/27Oct19/VBF_HToInvisible_M125_13TeV_TuneCP5_powheg_pythia8/VBF_HToInvisible_M125_pow_pythia8_2017/191027_233758/0000/tree_1.root"
+        "MET_Run2018C" : [
+            "root://gfe02.grid.hep.ph.ic.ac.uk:1097///store/user/ebhal/CHIP_skim_data_2018_20191130/MET/crab_MET_Run2018C-Nano1June2019-v1/191130_045826/0000/tree_1.root"
         ]
     }
+
+    # fileset = {
+    #     "VBF_HToInvisible_M125_pow_pythia8_2017" : [
+    #         "root://cmsxrootd.fnal.gov//store/user/aandreas/nanopost/27Oct19/VBF_HToInvisible_M125_13TeV_TuneCP5_powheg_pythia8/VBF_HToInvisible_M125_pow_pythia8_2017/191027_233758/0000/tree_1.root"
+    #     ]
+    # }
 
     years = list(set(map(extract_year, fileset.keys())))
     assert(len(years)==1)
@@ -61,6 +73,7 @@ def main():
                                     executor=processor.futures_executor,
                                     executor_args={'workers': 4, 'flatten': True},
                                     chunksize=500000,
+#                                    maxchunks=1
                                     )
         save(output, f"{processor_class}_{dataset}.coffea")
         # Debugging / testing output

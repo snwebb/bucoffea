@@ -374,25 +374,25 @@ def setup_candidates(df, cfg):
         ak4 = ak4[object_overlap(ak4, photons, dr=cfg.OVERLAP.AK4.PHOTON.DR)]
 
 
-    ak8 = JaggedCandidateArray.candidatesfromcounts(
-        df['nFatJet'],
-        pt=df[f'FatJet_pt{jes_suffix}'],
-        eta=df['FatJet_eta'],
-        abseta=np.abs(df['FatJet_eta']),
-        phi=df['FatJet_phi'],
-        mass=df[f'FatJet_msoftdrop{jes_suffix}'],
-        tightId=(df['FatJet_jetId']&2) == 2, # Tight
-        csvv2=df["FatJet_btagCSVV2"],
-        deepcsv=df['FatJet_btagDeepB'],
-        tau1=df['FatJet_tau1'],
-        tau2=df['FatJet_tau2'],
-        tau21=df['FatJet_tau2']/df['FatJet_tau1'],
-        wvsqcd=df['FatJet_deepTag_WvsQCD'],
-        wvsqcdmd=df['FatJet_deepTagMD_WvsQCD'],
-        zvsqcd=df['FatJet_deepTag_ZvsQCD'],
-        zvsqcdmd=df['FatJet_deepTagMD_ZvsQCD']
-    )
-    ak8 = ak8[ak8.tightId & object_overlap(ak8, muons) & object_overlap(ak8, electrons) & object_overlap(ak8, photons)]
+    # ak8 = JaggedCandidateArray.candidatesfromcounts(
+    #     df['nFatJet'],
+    #     pt=df[f'FatJet_pt{jes_suffix}'],
+    #     eta=df['FatJet_eta'],
+    #     abseta=np.abs(df['FatJet_eta']),
+    #     phi=df['FatJet_phi'],
+    #     mass=df[f'FatJet_msoftdrop{jes_suffix}'],
+    #     tightId=(df['FatJet_jetId']&2) == 2, # Tight
+    #     csvv2=df["FatJet_btagCSVV2"],
+    #     deepcsv=df['FatJet_btagDeepB'],
+    #     tau1=df['FatJet_tau1'],
+    #     tau2=df['FatJet_tau2'],
+    #     tau21=df['FatJet_tau2']/df['FatJet_tau1'],
+    #     wvsqcd=df['FatJet_deepTag_WvsQCD'],
+    #     wvsqcdmd=df['FatJet_deepTagMD_WvsQCD'],
+    #     zvsqcd=df['FatJet_deepTag_ZvsQCD'],
+    #     zvsqcdmd=df['FatJet_deepTagMD_ZvsQCD']
+    # )
+    # ak8 = ak8[ak8.tightId & object_overlap(ak8, muons) & object_overlap(ak8, electrons) & object_overlap(ak8, photons)]
 
     if extract_year(df['dataset']) == 2017:
         met_branch = 'METFixEE2017'
@@ -402,7 +402,8 @@ def setup_candidates(df, cfg):
     met_pt = df[f'{met_branch}_pt{jes_suffix_met}']
     met_phi = df[f'{met_branch}_phi{jes_suffix_met}']
 
-    return met_pt, met_phi, ak4, bjets, ak8, muons, electrons, taus, photons
+    #    return met_pt, met_phi, ak4, bjets, ak8, muons, electrons, taus, photons
+    return met_pt, met_phi, ak4, bjets, muons, electrons, taus, photons
 
 def monojet_regions(cfg):
     common_cuts = [

@@ -1,6 +1,6 @@
 from coffea.util import load
 from tabulate import tabulate
-import numpy 
+import numpy ,sys
 def unpack(val):
     try:
         return unpack(val[0])
@@ -8,7 +8,8 @@ def unpack(val):
         return val
     
 
-output = load("monojet.coffea")
+#output = load("monojet.coffea")
+output = load(sys.argv[1])
 
 data=output['kinematics']
 
@@ -20,7 +21,7 @@ keys = [
 'recoil_phi',
 'ak4pt0',
 'ak4eta0',
-'leadbtag',
+#'leadbtag',
 'nLooseMu',
 'nTightMu',
 'mupt0',

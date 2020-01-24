@@ -168,11 +168,11 @@ default:
       mode: nano
 
   run:
-    sync: False
+    sync: True
     save:
-      passing: False
+      passing: True
     kinematics:
-      save: False
+      save: True
       events:
         - 36533896
         - 35733274
